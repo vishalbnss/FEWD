@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smooth Analog Clock</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            background-color: #121212;
+        }
+        .clock-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #clock {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background-color: #1E1E1E;
+            border: 10px solid #2C2C2C;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            background-color: white;
+            border-radius: 4px;
+            transition: transform 0.1s linear;
+        }
+        #hour-hand {
+            width: 6px;
+            height: 80px;
+            margin-left: -3px;
+            background-color: #E0E0E0;
+        }
+        #minute-hand {
+            width: 4px;
+            height: 120px;
+            margin-left: -2px;
+            background-color: #A0A0A0;
+        }
+        #second-hand {
+            width: 2px;
+            height: 140px;
+            margin-left: -1px;
+            background-color: #FF4136;
+            transition: transform 0.04s linear;
+        }
+        .center-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            background-color: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="clock-container">
+        <div id="clock">
+            <div id="hour-hand" class="hand"></div>
+            <div id="minute-hand" class="hand"></div>
+            <div id="second-hand" class="hand"></div>
+            <div class="center-dot"></div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const milliseconds = now.getMilliseconds();
+            const seconds = now.getSeconds();
+            const minutes = now.getMinutes();
+            const hours = now.getHours() % 12;
+
+            // Smooth second hand rotation including milliseconds
+            const smoothSecondDegrees = ((seconds + milliseconds / 1000) / 60) * 360;
+            const minuteDegrees = ((minutes + seconds / 60) / 60) * 360; 
+            const hourDegrees = ((hours + minutes / 60) / 12) * 360;
+
+            document.getElementById('second-hand').style.transform = `rotate(${smoothSecondDegrees}deg)`;
+            document.getElementById('minute-hand').style.transform = `rotate(${minuteDegrees}deg)`;
+            document.getElementById('hour-hand').style.transform = `rotate(${hourDegrees}deg)`;
+        }
+
+        // Update clock immediately and then every 40ms for smooth motion
+        updateClock();
+        setInterval(updateClock, 40);
+    </script>
+</body>
+</html>
